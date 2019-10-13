@@ -4,4 +4,12 @@
  * JavaScript Same-origin policy.
  */
 header('Access-Control-Allow-Origin: *');
-?>pong
+require_once 'config.php';
+
+
+$database->insert("clients",
+[
+  "ip" => $_SERVER['REMOTE_ADDR']
+]);
+echo $_SERVER['REMOTE_ADDR']
+?>

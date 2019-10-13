@@ -179,19 +179,11 @@ function updateList() {
     var stno_pl;
     var tsec;
     var tstr;
-    if (clcfg['type'] == 'startlist') {
-      stno_pl = '<td class="col_stno">' + line['Stno'];
-      // Format start time, adding zero time (moment.js doesn't really help for this)
-      tsec = time_to_sec(evcfg['zerotime']) + time_to_sec(line['Start']);
-      tstr = sec_to_time(tsec);
-    } else {
-      stno_pl = '<td class="col_place ' + highlightClass + '">' + line['Place'] + (line['Place'] != '' ? '.' : '');
+        stno_pl = '<td class="col_place ' + highlightClass + '">' + line['Place'] + (line['Place'] != '' ? '.' : '');
       tsec = time_to_sec(line['Time']);
       tsec_overall = time_to_sec(line['TimeOverall']);
       tstr = (line['Classifier'] == 0 ? sec_to_time(tsec) : classifier[line['Classifier']]);
       tstr_overall = (line['ClassifierOverall'] == 0 ? sec_to_time(tsec_overall) : classifier[line['ClassifierOverall']]);
-
-    }
 
 
     // For simplicity, use a complete table tag for each row, that way we can treat them independently

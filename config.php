@@ -1,4 +1,31 @@
 <?php
+require 'vendor/autoload.php';
+
+// Using Medoo namespace
+use Medoo\Medoo;
+
+$database = new Medoo([
+	// required
+	'database_type' => 'mysql',
+	'database_name' => 'radadi',
+	'server' => 'localhost',
+	'username' => 'root',
+	'password' => 'root',
+
+	// [optional]
+	'charset' => 'utf8mb4',
+	'collation' => 'utf8mb4_general_ci',
+	'port' => 8889,
+
+	// [optional] Enable logging (Logging is disabled by default for better performance)
+	'logging' => true
+
+	// [optional] MySQL socket (shouldn't be used with server and port)
+	// 'socket' => '/tmp/mysql.sock',
+
+]);
+
+
 // This will go into DB
 $eventconfig = array(
   'eventname' => 'Hamburg Sprint',
@@ -76,7 +103,7 @@ function get_most_recent_xml()
 }
 
 function scan_dir($dir) {
-    $ignored = array('.', '..', '.svn', '.htaccess');
+    $ignored = array('.', '..', '.svn', '.htaccess', '.DS_Store');
 
     $files = array();
     foreach (scandir($dir) as $file) {

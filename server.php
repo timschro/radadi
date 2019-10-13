@@ -18,6 +18,9 @@ error_reporting(-1);
 require_once "config.php";
 
 
+$clientconfig = $database->get('clients', ['classes', 'ip'], ['ip'=>$_SERVER['REMOTE_ADDR']]);
+
+
 
 
 $needed_cols = array('Stno','Chipno','First name','Surname','YB','S','Start','Time','Classifier','City','Nat','Short','km','m','Course controls','Place');
@@ -31,23 +34,10 @@ if (!isset($_GET['timestamp'])) {
     $_GET['timestamp']=0;
 }
 
-if (isset($clientconfig[$_SERVER['REMOTE_ADDR']])) {
-    $clientconfig = $clientconfig[$_SERVER['REMOTE_ADDR']];
-} else {
-    $clientconfig = $clientconfig['default'];
-}
 
 
-$xml=false;
-
-if ($clientconfig["type"] == "startlist") {
-    $csvconfig = $oe11_startlist_csv;
-} elseif ($clientconfig["type"] == "resultlist_xml") {
     $csvconfig = $iof_xml;
     $xml=true;
-} else {
-    $csvconfig = $oe11_resultlist_csv;
-}
 
 
 
@@ -70,29 +60,12 @@ for ($i=0;$i<30;$i++) {
 if ($xml) {
     $csv= read_iof_xml($csvconfig) or jsonerr();
     $output=array();
+    $classes = explode(',', $clientconfig['classes']);
     foreach ($csv as $idx=>$line) {
-        // Filter CSV by classes
-        if ($clientconfig['classes']!==true && !in_array($line['Short'], $clientconfig['classes'])) {
+        if (!in_array($line['Short'], $classes)) {
             continue;
         }
-
         $output[]=$line;
-    }
-} else {
-    $csv=read_oe11_csv($csvconfig) or jsonerr();
-
-    $output=array();
-    foreach ($csv as $idx=>$line) {
-        // Filter CSV by classes
-        if ($clientconfig['classes']!==true && !in_array($line['Short'], $clientconfig['classes'])) {
-            continue;
-        }
-        // Results: remove 'did not start'
-        if ($clientconfig['type']=='resultlist' && $line['Classifier']==1) {
-            continue;
-        }
-
-        $output[]=array_intersect_key($line, array_flip($needed_cols));
     }
 }
 
@@ -118,9 +91,8 @@ function read_iof_xml($config)
     // overwrite
     $GLOBALS['eventconfig'] = array(
     'eventname' => (string) $xml->Event->Name,
-    'stagename' => (string) $xml->Event->Race->RaceNumber,
-    'zerotime' => '10:00:00',
-  );
+    'stagename' => (string) $xml->Event->Race->RaceNumber
+    );
 
     foreach ($xml->ClassResult as $empl) {
         foreach ($empl->PersonResult as $pr) {
