@@ -131,7 +131,7 @@ function calculateResult($res, $clsname = "", $leg = 0) {
       $row['short'] = $row['short']." -  Strecke $leg";
     }
 
-    if ($r['status'] == 1) {
+    if ($r['status'] == 1 || $r['status'] == 15) {
       $row['place'] = $place;
 
       if ($t > 0)

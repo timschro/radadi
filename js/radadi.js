@@ -154,7 +154,6 @@ function updateList() {
   $('#eventname').text(evcfg['eventname']);
   var subtitle = (clcfg['type'] == 'startlist' ? 'Startliste' : 'Vorl. Ergebnisse') + ' - ' + evcfg['stagename'];
   $('#subtitle').text(subtitle);
-  console.log(ip);
   $('#ip').text(ip);
 
 
@@ -206,7 +205,7 @@ function updateList() {
       if(line['classifier'] == 7) {
         stno_pl = '<td class="col_place ' + highlightClass + '">' +  classifier[line['classifier']];
       }
-      tstr = (line['classifier'] == 0 || line['classifier'] == 7 ? line['time'] : classifier[line['classifier']]);
+      tstr = ((line['classifier'] == 0 || line['classifier'] == 7) && line['time'] != null ? line['time'] : classifier[line['classifier']]);
       tstr = (tstr.substring(0, 2) == "0:" ? tstr.substring(2) : tstr);
 
       if(isTeam) {
@@ -407,7 +406,6 @@ var timeSince = function (prefix, date, postfix = "", fallbackIfZero = "") {
   if (interval > 1 || interval === 0) {
     intervalType = intervalTypePl;
   }
-  console.log(interval);
 
   if (fallbackIfZero == "" || interval > 1) {
     return prefix + interval + ' ' + intervalType + postfix;
