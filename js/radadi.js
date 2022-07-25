@@ -157,7 +157,6 @@ function updateList() {
   console.log(ip);
   $('#ip').text(ip);
 
-  $('#timestamp').text(timeSince("Aktualisiert vor ", tmstmp * 1000, ".", "LIVE"));
 
   $('#radaspace').empty();
   pagecount = 0;
@@ -167,9 +166,7 @@ function updateList() {
 
     var listhtml = '';
 
-    var fiveMinutes = 60 * 5 * 1000;
-
-    if (line["finish"] * 1000 < new Date() && new Date() - line["finish"] * 1000 < fiveMinutes) {
+    if (line['highlight']) {
 
       highlightClass = "highlight";
     } else {
@@ -327,9 +324,11 @@ function flipPage() {
 
   //$('#radapage'+curpage).fadeIn(800);
   $('#radapage' + curpage).show();
-  $('#page').text("Seite " + curpage + " von " + pagecount);
+  $('#page').text(curpage + " / " + pagecount);
   window.setTimeout(flipPage, 1000 * displaytime);
+  $('#timestamp').text(timeSince("Aktualisiert vor ", timestamp * 1000, ".", "LIVE"));
 
+  /*
   let progressbar = $('#progressbar');
   let max = progressbar.attr('max');
   let time = displaytime * 950 / max;
@@ -346,7 +345,10 @@ function flipPage() {
       clearInterval(animate);
     }
   };
+  
+
   const animate = setInterval(() => loading(), time);
+  */
 };
 
 // Show error pop-up
@@ -402,6 +404,7 @@ var timeSince = function (prefix, date, postfix = "", fallbackIfZero = "") {
   if (interval > 1 || interval === 0) {
     intervalType = intervalTypePl;
   }
+  console.log(interval);
 
   if (fallbackIfZero == "" || interval > 1) {
     return prefix + interval + ' ' + intervalType + postfix;

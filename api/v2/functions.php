@@ -17,7 +17,7 @@
   
 
 function ConnectToDB() {
-  $link = @new mysqli($_SERVER["MYSQL_HOST"], $_SERVER["MYSQL_USER"], $_SERVER["MYSQL_PASSWORD"], $_SERVER["MYSQL_DATABASE"]);
+  $link = @new mysqli(getenv("MYSQL_HOST"), getenv("MYSQL_USER"), getenv("MYSQL_PASSWORD"), getenv("MYSQL_DATABASE"));
   
   if (!$link) {
     die('Not connected : ' . $link->connect_error);
@@ -108,7 +108,13 @@ function calculateResult($res, $clsname = "", $leg = 0) {
     $row = array();
 
 
-    $row['name'] = $r['name'];      
+    $name = $r['name']; 
+
+    if(strlen($name)>20) {
+      $split_name = explode(" ", $name, 2);
+      $name = $split_name[0][0] . ". " . $split_name[1];
+    }
+    $row['name'] = $name;      
     if(is_null($r['team'])) {
       $row['team'] = "";
     } else {
@@ -133,7 +139,10 @@ function calculateResult($res, $clsname = "", $leg = 0) {
       else
         $row['time'] = "OK"; // No timing
 
-      $row['finish'] = $r['finish'];
+        $t = $r['finish'] / 10;
+
+      $row['finish'] = sprintf("%d:%02d:%02d", $t/3600, ($t/60)%60, $t%60);;
+      $row['highlight'] = $r['finish'] > (secondsSinceMidnightOfDate() - 60 * 5)*10;
 
       if(isset($r['after']) && $r['after']!='') {
         $row['after'] = $r['after'];
@@ -420,6 +429,17 @@ function processTeam($link, $cid, $team) {
   if (isset($team->r)) {
     updateLinkTable($link, "mopTeamMember", $cid, $id, "rid", $team->r);
   }
+}
+
+function secondsSinceMidnightOfDate(): int {
+    $midnightToday = new DateTimeImmutable('today');
+    $now = new DateTimeImmutable('now');
+    $diff = $now->diff($midnightToday);
+
+    return $diff->s // seconds
+        + $diff->i * 60 // minutes to seconds
+        + $diff->h * 60 * 60 // hours to seconds
+    ;
 }
 
 /** MOP return code. */
