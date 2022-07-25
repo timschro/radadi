@@ -72,7 +72,7 @@ function longPoll() {
 // Process JSON startlist/results data
 function updateList() {
 
-  var classifier = ['OK', 'Nicht gestartet', 'Abgebr.', 'Fehlst.', 'Disq.', 'ot', 'unknown', 'np'];
+  var classifier = ['OK', 'dns', 'Abgebr.', 'Fehlst.', 'Disq.', 'ot', 'unknown', 'AK'];
   var evcfg = newData['eventconfig'];
   var clcfg = newData['clientconfig'];
   var ip = newData['remote_ip'];
@@ -203,13 +203,16 @@ function updateList() {
       tstr = sec_to_time(tsec);
     } else {
       stno_pl = '<td class="col_place ' + highlightClass + '">' + line['place'] + (line['place'] != '' ? '.' : '');
-      tstr = (line['classifier'] == 0 ? line['time'] : classifier[line['classifier']]);
+      if(line['classifier'] == 7) {
+        stno_pl = '<td class="col_place ' + highlightClass + '">' +  classifier[line['classifier']];
+      }
+      tstr = (line['classifier'] == 0 || line['classifier'] == 7 ? line['time'] : classifier[line['classifier']]);
       tstr = (tstr.substring(0, 2) == "0:" ? tstr.substring(2) : tstr);
 
       if(isTeam) {
-        tstr_overall = (line['classifierOverall'] == 0 ? line['time'] : classifier[line['classifierOverall']]);
+        tstr_overall = (line['classifierOverall'] == 0 || line['classifierOverall'] == 7 ? line['time'] : classifier[line['classifierOverall']]);
       } else {
-        tstr_overall = (line['classifierOverall'] == 0 ? line['timeOverall'] : classifier[line['classifierOverall']]);
+        tstr_overall = (line['classifierOverall'] == 0 || line['classifierOverall'] ? line['timeOverall'] : classifier[line['classifierOverall']]);
 
       }
       if (tstr_overall) {
