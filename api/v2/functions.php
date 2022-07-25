@@ -139,8 +139,6 @@ function calculateResult($res, $clsname = "", $leg = 0) {
       else
         $row['time'] = "OK"; // No timing
 
-        $t = $r['finish'] / 10;
-
       $row['finish'] = sprintf("%d:%02d:%02d", $t/3600, ($t/60)%60, $t%60);;
       $row['highlight'] = ($r['finish'] <= secondsSinceMidnightOfDate() * 10) &&  ($r['finish'] > (secondsSinceMidnightOfDate() - 60 * 5)*10);
 
@@ -149,6 +147,7 @@ function calculateResult($res, $clsname = "", $leg = 0) {
 
       } else {
         $after = $t - $bestTime;
+
         if ($after > 3600)
           $row['after'] = sprintf("+%d:%02d:%02d", $after/3600, ($after/60)%60, $after%60);
         elseif ($after > 0)
