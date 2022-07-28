@@ -92,7 +92,7 @@ while ($rClasses = $resClasses->fetch_assoc()) {
     "cmp.rt + cmp.st AS finish ".
     "FROM mopTeamMember tm, mopCompetitor cmp, mopTeam t, mopOrganization o " .
     "WHERE t.cls = '$cls' AND t.id = tm.id AND tm.rid = cmp.id AND o.id = t.org " .
-    "AND t.cid = '$cmpId' AND tm.cid = '$cmpId' AND cmp.cid = '$cmpId' AND t.stat>0 " .
+    "AND t.cid = '$cmpId' AND tm.cid = '$cmpId' AND cmp.cid = '$cmpId' AND t.stat < 10 " .
     "AND tm.leg='$leg' AND cmp.stat > 0 AND cmp.stat < 10 ORDER BY t.stat, t.rt ASC, t.id";
 
   $rname = "Finish";
