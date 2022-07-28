@@ -55,7 +55,7 @@ if ($resClasses->num_rows > 0) {
 
 
 if ($exists_client) {
-  $sql = "SELECT cls.id AS classId, cls.name AS name, cc.leg AS leg FROM clients AS c, classesClients AS cc, mopClass AS cls WHERE c.ip='$REMOTE_IP' and c.cid=$cmpId AND cc.client_id=c.id AND cls.id=cc.class_id ORDER BY cc.leg, cls.ord";
+  $sql = "SELECT cls.id AS classId, cls.name AS name, cc.leg AS leg FROM clients AS c, classesClients AS cc, mopClass AS cls WHERE c.ip='$REMOTE_IP' and c.cid=$cmpId AND cc.client_id=c.id AND cls.id=cc.class_id ORDER BY cls.ord, leg";
 } else {
   $sql = "SELECT cls.id AS classId, cls.name AS name FROM mopClass AS cls WHERE cls.cid=$cmpId ORDER BY cls.ord";
 }
@@ -86,14 +86,54 @@ while ($rClasses = $resClasses->fetch_assoc()) {
     $radio = 'finish';
   }
 
-  $sql = "SELECT t.id AS id, cmp.name AS name, t.name AS team, cmp.stat AS cmpstatus, " .
-    "t.rt AS time, t.stat AS status, " .
+  /*
+SELECT DISTINCT
+	cmp.id AS id,
+	tm.leg,
+	cmp.name AS name,
+	t.name AS team,
+	cmp.stat AS status,
+	cmp.rt AS time,
+	t.stat AS tstatus,
+	o.nat AS nat,
+	cmp.rt + cmp.st AS finish,
+	cmp.st - t.st + cmp.rt AS ttime
+FROM
+	mopTeamMember tm,
+	mopCompetitor cmp,
+	mopTeam t,
+	mopOrganization o
+WHERE
+	t.cls = '1'
+	AND t.id = tm.id
+	AND tm.rid = cmp.id
+	AND o.id = t.org
+	AND t.cid = '10'
+	AND tm.cid = '10'
+	AND cmp.cid = '10'
+	AND t.stat < 10
+	AND tm.leg = '3'
+	AND cmp.stat > 0
+	AND cmp.stat < 10
+ORDER BY
+	t.stat,
+	ttime ASC,
+	t.id
+
+
+  */
+
+  $sql = "SELECT DISTINCT cmp.id AS id, t.id, tm.leg, cmp.name AS name, t.name AS team, cmp.stat AS status, " .
+    "cmp.rt AS time, t.stat AS tstatus, " .
     "o.nat AS nat, " .
-    "cmp.rt + cmp.st AS finish ".
-    "FROM mopTeamMember tm, mopCompetitor cmp, mopTeam t, mopOrganization o " .
+    "cmp.rt + cmp.st AS finish, ".
+    "cmp.st - t.st + cmp.rt AS ttime ".
+    "FROM mopCompetitor cmp, mopTeamMember tm, mopTeam t, mopOrganization o " .
     "WHERE t.cls = '$cls' AND t.id = tm.id AND tm.rid = cmp.id AND o.id = t.org " .
     "AND t.cid = '$cmpId' AND tm.cid = '$cmpId' AND cmp.cid = '$cmpId' AND t.stat < 10 " .
-    "AND tm.leg='$leg' AND cmp.stat > 0 AND cmp.stat < 10 ORDER BY t.stat, t.rt ASC, t.id";
+    "AND tm.leg='$leg' AND cmp.stat > 0 AND cmp.stat < 10 ORDER BY t.stat, ttime ASC, t.id";
+
+
 
   $rname = "Finish";
 

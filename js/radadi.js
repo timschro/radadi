@@ -218,6 +218,15 @@ function updateList() {
         tstr_overall = (tstr_overall.substring(0, 2) == "0:" ? tstr_overall.substring(2) : tstr_overall);
       }
 
+      tstr_ind = line['timeInd'];
+      if(tstr_ind) {
+        tstr_ind = (tstr_ind.substring(0, 2) == "0:" ? tstr_ind.substring(2) : tstr_ind);
+      } else {
+        tstr_ind="";
+      }
+      
+
+
 
     }
 
@@ -233,6 +242,8 @@ function updateList() {
       listhtml += '</div></td><td class="col_name ' + highlightClass + '">' + line['team'] + '</td>';
       //listhtml += '<td class="col_yob">'+line['yb']+'</td>';
       listhtml += '<td class="col_club ' + highlightClass + '">' + line['name'] + '</td>';
+      listhtml += '<td class="col_time_ind ' + highlightClass + '">' + tstr_ind + '</td>';
+
       listhtml += '<td class="col_time ' + highlightClass + '">' + tstr + '</td>';
       listhtml += '<td class="col_after ' + highlightClass + '">' + line['after'] + '</td>';
 

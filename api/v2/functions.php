@@ -96,9 +96,16 @@ function calculateResult($res, $clsname = "", $leg = 0) {
   $bestTime = -1;
   while ($r = $res->fetch_assoc()) {
     
-      
+    
     $count++;
-    $t = $r['time']/10;
+    if($leg > 0) {
+      $t = $r['ttime']/10;
+      $tInd = $r['time']/10;
+    } else {
+      $t = $r['time']/10;
+    }
+
+
     if ($bestTime == -1)
       $bestTime = $t;
     if ($lastTime != $t) {
@@ -131,13 +138,19 @@ function calculateResult($res, $clsname = "", $leg = 0) {
       $row['short'] = $row['short']." -  Strecke $leg";
     }
 
+
+
     if ($r['status'] == 1 || $r['status'] == 15) {
       $row['place'] = $place;
-
       if ($t > 0)
         $row['time'] = sprintf("%d:%02d:%02d", $t/3600, ($t/60)%60, $t%60);
       else
         $row['time'] = "OK"; // No timing
+      
+
+     if ($tInd > 0)
+     $row['timeInd'] = sprintf("%d:%02d:%02d", $tInd/3600, ($tInd/60)%60, $tInd%60);
+
 
       $row['finish'] = sprintf("%d:%02d:%02d", $t/3600, ($t/60)%60, $t%60);;
       $row['highlight'] = ($r['finish'] <= secondsSinceMidnightOfDate() * 10) &&  ($r['finish'] > (secondsSinceMidnightOfDate() - 60 * 5)*10);
