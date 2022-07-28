@@ -55,7 +55,7 @@ if ($resClasses->num_rows > 0) {
 
 
 if ($exists_client) {
-  $sql = "SELECT cls.id AS classId, cls.name AS name, cc.leg AS leg FROM clients AS c, classesClients AS cc, mopClass AS cls WHERE c.ip='$REMOTE_IP' and c.cid=$cmpId AND cc.client_id=c.id AND cls.id=cc.class_id ORDER BY cls.ord";
+  $sql = "SELECT cls.id AS classId, cls.name AS name, cc.leg AS leg FROM clients AS c, classesClients AS cc, mopClass AS cls WHERE c.ip='$REMOTE_IP' and c.cid=$cmpId AND cc.client_id=c.id AND cls.id=cc.class_id ORDER BY cc.leg, cls.ord";
 } else {
   $sql = "SELECT cls.id AS classId, cls.name AS name FROM mopClass AS cls WHERE cls.cid=$cmpId ORDER BY cls.ord";
 }
