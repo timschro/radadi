@@ -133,40 +133,39 @@ td.col_stno {
 }
 
 td.col_place {
-    width: 6%;
+    width: 5%;
     text-align: right;
     font-weight: 700;
 }
 
 td.col_place_overall {
-    width: 6%;
+    width: 0;
     text-align: right;
     font-style: italic;
 }
 
 td.col_nat {
-    width: 1.5em;
+    width: 1em;
 }
 
 td.col_name {
-    width: 37%;
     font-weight: 700;
 }
 
 td.col_club {
-    width: 34%;
+    width: 35%;
 
 }
 
 td.col_time {
-    width: 18%;
+    width: 10%;
     text-align: right;
     font-weight: 700;
 
 }
 
 table.radalist td.col_time_ind {
-    width: 10%;
+    width: 8%;
     text-align: right;
     font-weight: 400;
     font-size: 130%;
@@ -174,7 +173,7 @@ table.radalist td.col_time_ind {
 }
 
 table.radalist td.col_after {
-    width: 10%;
+    width: 8%;
     font-style: italic;
     font-size: 130%;
     text-align: right
