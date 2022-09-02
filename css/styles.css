@@ -68,7 +68,6 @@ h1 {
 
 span.coursedata {
     font-size: 70%;
-    font-style: italic;
     margin-left: 1em;
 }
 
@@ -133,7 +132,7 @@ td.col_stno {
 }
 
 td.col_place {
-    width: 5%;
+    width: 8%;
     text-align: right;
     font-weight: 700;
 }
@@ -153,12 +152,12 @@ td.col_name {
 }
 
 td.col_club {
-    width: 35%;
+    width: 30%;
 
 }
 
 td.col_time {
-    width: 10%;
+    width: 12%;
     text-align: right;
     font-weight: 700;
 
@@ -173,7 +172,7 @@ table.radalist td.col_time_ind {
 }
 
 table.radalist td.col_after {
-    width: 8%;
+    width: 12%;
     font-style: italic;
     font-size: 130%;
     text-align: right

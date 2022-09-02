@@ -90,7 +90,7 @@ function updateList() {
     var cont = (newpage && pagecount > 1) ? ' <i>(Fortsetzung)</i>' : '';
     var html = '<div class="classheader"><h2><span class="classname">' + classname + "</span>" + cont;
     if (typeof dist !== 'undefined') {
-      html += ' <span class="coursedata">' + dist + ' km</span>';
+      html += ' <span class="coursedata">' + dist + '</span>';
     }
     html += '</h2></div>';
     return html;
@@ -174,7 +174,7 @@ function updateList() {
 
     // Class heading before previous entry if new page has started
     if (newpage) {
-      $(curcol()).prepend(classheader(line['short'], line['km'], line['controls'], true));
+      $(curcol()).prepend(classheader(line['short'], line['num'], line['controls'], true));
       newpage = false;
     }
 
@@ -182,7 +182,7 @@ function updateList() {
     if (line['short'] != prevclass && prevclass != '') {
       listhtml += '<div class="gap"></div>';
       // Enclosing <div> to move the class heading automatically if the first line is moved to the next column
-      listhtml += '<div>' + classheader(line['short'], line['km'], line['controls'], false);
+      listhtml += '<div>' + classheader(line['short'], line['num'], line['controls'], false);
       evenrow = false;
       has_heading = true;
     } else {
@@ -201,7 +201,7 @@ function updateList() {
       tsec = time_to_sec(evcfg['zerotime']) + time_to_sec(line['Start']);
       tstr = sec_to_time(tsec);
     } else {
-      stno_pl = '<td class="col_place ' + highlightClass + '">' + line['place'] + (line['place'] != '' ? '.' : '');
+      stno_pl = '<td class="col_place ' + highlightClass + '">' + line['place'] + (line['place'] != '' ? '.' : '') +  (line['final'] != '' ? "&nbsp;"+line['final'] : '');
       if(line['classifier'] == 7) {
         stno_pl = '<td class="col_place ' + highlightClass + '">' +  classifier[line['classifier']];
       }

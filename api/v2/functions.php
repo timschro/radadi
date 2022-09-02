@@ -87,7 +87,16 @@ function convertStatus($status){
   }
 }
 
-function calculateResult($res, $clsname = "", $leg = 0) {
+
+function calculateResult($res, $clsname = "", $leg = 0, $threshold_final = 0, $runnersInClass=0) {
+
+
+  if(substr($clsname, 0, 3)=="W21" || substr($clsname, 0, 3)=="M21"){
+    $wre = true;
+  } else {
+    $wre = false;
+  }
+
   $out = array();  
   
   $place = 0;
@@ -132,16 +141,32 @@ function calculateResult($res, $clsname = "", $leg = 0) {
     } else {
       $row['nat'] = $r['nat'];
     }
+
     $row['short'] = $clsname;
+    $row["num"] = $runnersInClass;
 
     if ($leg > 0) {
       $row['short'] = $row['short']." -  Strecke $leg";
     }
 
 
-
+    $row['final'] = "";
     if ($r['status'] == 1 || $r['status'] == 15) {
       $row['place'] = $place;
+      
+      if($threshold_final > 0 && $place <= $threshold_final) {
+        $row['final'] = "A";
+        if( !$wre && $row['nat'] != "" && $row['nat'] != "GER") {
+          $threshold_final += 1;
+        }
+      }elseif($threshold_final > 0 && $place > $threshold_final) {
+        $row['final'] = "B" ;
+      }
+
+
+
+
+
       if ($t > 0)
         $row['time'] = sprintf("%d:%02d:%02d", $t/3600, ($t/60)%60, $t%60);
       else
@@ -153,7 +178,7 @@ function calculateResult($res, $clsname = "", $leg = 0) {
 
 
       $row['finish'] = sprintf("%d:%02d:%02d", $t/3600, ($t/60)%60, $t%60);;
-      $row['highlight'] = ($r['finish'] <= secondsSinceMidnightOfDate() * 10) &&  ($r['finish'] > (secondsSinceMidnightOfDate() - 60 * 5)*10);
+      $row['highlight'] = ($r['finish'] <= secondsSinceMidnightOfDate() * 10) &&  ($r['finish'] > (secondsSinceMidnightOfDate() - 60 * 3)*10);
 
       if(isset($r['after']) && $r['after']!='') {
         $row['after'] = $r['after'];
@@ -173,7 +198,9 @@ function calculateResult($res, $clsname = "", $leg = 0) {
     }
     else {
       $row['place'] = "";
-
+      if($threshold_final > 0) {
+        $row['final'] = "B" ;
+      }
       $row['time'] = getStatusString($r['status']);
       $row['after'] = "";
     }
